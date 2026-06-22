@@ -5,7 +5,16 @@
 #include "xor_crypt.h"
 int main() {
    std::ifstream inFile;
-   inFile.open("C:\\Users\\semoc\\Projects\\sweet_red_things\\lab_loader\\payload.bin");
+   char path[255];
+   int size = GetModuleFileNameA(NULL, path);
+   for (int i = size - 1; i >= 0; i--) {
+      if (path[i] == '\\') {
+         path[i + 1] = '\0';
+         break;
+      }
+   }
+   std::string inpath = (std::string)path + "payload.bin";
+   inFile.open(inpath);
    if (!inFile.is_open())
       return 1;
    inFile.seekg(0, std::ios::end);
@@ -17,7 +26,8 @@ int main() {
    inFile.close();
    xor_crypt(buffer.data(), length);
    std::ofstream outFile;
-   outFile.open("C:\\Users\\semoc\\Projects\\sweet_red_things\\lab_loader\\payload_enc.bin");
+   std::string outpath = (std::string)path + "payload_enc.bin";
+   outFile.open(outpath);
    if (outFile.is_open()) {
       for (int i = 0; i < length; i++)
          outFile.put(buffer[i]);
