@@ -6,7 +6,7 @@
 int main() {
    std::ifstream inFile;
    char path[255];
-   int size = GetModuleFileNameA(NULL, path);
+   int size = GetModuleFileNameA(NULL, path, sizeof(path));
    for (int i = size - 1; i >= 0; i--) {
       if (path[i] == '\\') {
          path[i + 1] = '\0';
